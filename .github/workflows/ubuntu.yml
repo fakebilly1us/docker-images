@@ -1,0 +1,118 @@
+name: Ubuntu Aggregation Docker Workflow
+
+on:
+  workflow_dispatch:
+
+env:
+  OS_DOCKERHUB_IMAGE: fakebilly/ubuntu:20.04-os
+  DESKTOP_CORE_DOCKERHUB_IMAGE: fakebilly/ubuntu:20.04-core
+  DESKTOP_DOCKERHUB_IMAGE: fakebilly/ubuntu:20.04-desktop
+  WORKSHOP_DOCKERHUB_IMAGE: fakebilly/ubuntu:20.04-workshop
+  ALI_DOCKERHUB_REGISTRY: registry.cn-beijing.aliyuncs.com
+  OS_ALI_DOCKERHUB_IMAGE: monet/ubuntu:20.04-os
+  DESKTOP_CORE_ALI_DOCKERHUB_IMAGE: monet/ubuntu:20.04-core
+  DESKTOP_ALI_DOCKERHUB_IMAGE: monet/ubuntu:20.04-desktop
+  WORKSHOP_ALI_DOCKERHUB_IMAGE: monet/ubuntu:20.04-workshop
+
+jobs:
+  build:
+    name: Ubuntu Image
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Ali Docker Login
+        run: |
+          docker login -u ${{ secrets.ALI_DOCKERHUB_USERNAME }} -p ${{ secrets.ALI_DOCKERHUB_TOKEN }} ${{ env.ALI_DOCKERHUB_REGISTRY }}
+
+      - name: OS Docker images
+        uses: docker/build-push-action@v5.0.0
+        with:
+          platforms: |
+            linux/amd64
+          build-args:
+          context: os-docker-images
+          file: os-docker-images/Dockerfile
+          no-cache: true
+          push: true
+          tags: ${{ env.OS_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove OS Docker images
+        run: |
+          docker tag ${{ env.OS_DOCKERHUB_IMAGE }} ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.OS_ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.OS_ALI_DOCKERHUB_IMAGE }}
+          
+          docker rmi ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.OS_ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.OS_DOCKERHUB_IMAGE }}
+
+      - name: Desktop Core Docker images
+        uses: docker/build-push-action@v5.0.0
+        with:
+          platforms: |
+            linux/amd64
+          build-args:
+          context: desktop-core-docker-images
+          file: desktop-core-docker-images/Dockerfile
+          no-cache: true
+          push: true
+          tags: ${{ env.DESKTOP_CORE_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Desktop Core Docker images
+        run: |
+          docker tag ${{ env.DESKTOP_CORE_DOCKERHUB_IMAGE }} ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_CORE_ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_CORE_ALI_DOCKERHUB_IMAGE }}
+          
+          docker rmi ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_CORE_ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.DESKTOP_CORE_DOCKERHUB_IMAGE }}
+
+      - name: Desktop Docker images
+        uses: docker/build-push-action@v5.0.0
+        with:
+          platforms: |
+            linux/amd64
+          build-args:
+          context: desktop-docker-images
+          file: desktop-docker-images/Dockerfile
+          no-cache: true
+          push: true
+          tags: ${{ env.DESKTOP_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Desktop Docker images
+        run: |
+          docker tag ${{ env.DESKTOP_DOCKERHUB_IMAGE }} ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_ALI_DOCKERHUB_IMAGE }}
+          
+          docker rmi ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.DESKTOP_ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.DESKTOP_DOCKERHUB_IMAGE }}
+
+      - name: Workshop Docker images
+        uses: docker/build-push-action@v5.0.0
+        with:
+          platforms: |
+            linux/amd64
+          build-args:
+          context: workshop-docker-images
+          file: workshop-docker-images/Dockerfile
+          no-cache: true
+          push: true
+          tags: ${{ env.WORKSHOP_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Workshop Docker images
+        run: |
+          docker tag ${{ env.WORKSHOP_DOCKERHUB_IMAGE }} ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.WORKSHOP_ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.WORKSHOP_ALI_DOCKERHUB_IMAGE }}
+          
+          docker rmi ${{ env.ALI_DOCKERHUB_REGISTRY }}/${{ env.WORKSHOP_ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.WORKSHOP_DOCKERHUB_IMAGE }}
+
+      - name: Ali Docker Logout
+        run: |
+          docker logout ${{ env.ALI_DOCKERHUB_REGISTRY }}

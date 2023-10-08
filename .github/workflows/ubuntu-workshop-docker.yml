@@ -5,6 +5,7 @@ on:
 
 env:
   DOCKERHUB_IMAGE: fakebilly/ubuntu:20.04-workshop
+  GCHR_DOCKERHUB_IMAGE: ubuntu:20.04-workshop
   ALI_DOCKERHUB_IMAGE: monet/ubuntu:20.04-workshop
 
 jobs:
@@ -15,14 +16,19 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4.1.0
-        with:
-          submodules: recursive
 
       - name: Docker Login
         uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: GCHR Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.GCHR_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.GCHR_DOCKERHUB_TOKEN }}
 
       - name: Ali Docker Login
         uses: docker/login-action@v3.0.0
@@ -43,7 +49,13 @@ jobs:
           push: true
           tags: ${{ env.DOCKERHUB_IMAGE }}
 
-      - name: Tag and Push and Remove Docker images
+      - name: Tag and Push and Remove GCHR Docker images
+        run: |
+          docker tag ${{ env.DOCKERHUB_IMAGE }} ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker push ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker rmi ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Ali Docker images
         run: |
           docker tag ${{ env.DOCKERHUB_IMAGE }} ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
           docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}

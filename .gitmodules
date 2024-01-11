@@ -1,16 +1,12 @@
-[submodule "os-docker-images"]
-	path = os-docker-images
-	url = https://github.com/fakebilly-dev/os-docker-images.git
-	branch = main
-[submodule "desktop-core-docker-images"]
-	path = desktop-core-docker-images
-	url = https://github.com/fakebilly-dev/desktop-core-docker-images.git
-	branch = main
-[submodule "desktop-docker-images"]
-	path = desktop-docker-images
-	url = https://github.com/fakebilly-dev/desktop-docker-images.git
-	branch = main
-[submodule "workshop-docker-images"]
-	path = workshop-docker-images
-	url = https://github.com/fakebilly-dev/workshop-docker-images.git
-	branch = main
+[submodule "workshop-image-desktop-core"]
+	path = workshop-image-desktop-core
+	url = https://github.com/fakebilly1us/workshop-image-desktop-core.git
+[submodule "workshop-image-desktop-os"]
+	path = workshop-image-desktop-os
+	url = https://github.com/fakebilly1us/workshop-image-desktop-os.git
+[submodule "workshop-image-desktop-v2"]
+	path = workshop-image-desktop-v2
+	url = https://github.com/fakebilly1us/workshop-image-desktop-v2.git
+[submodule "workshop-image-desktop"]
+	path = workshop-image-desktop
+	url = https://github.com/fakebilly1us/workshop-image-desktop.git

@@ -1,0 +1,82 @@
+name: Debian 12.4 Cloud Image Workflow
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  BUILD_WORKSPACE_NAME: workspace
+
+jobs:
+  build:
+    name: Debian 12.4 Cloud Image Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+        with:
+          submodules: recursive
+
+      - name: Create Workspace
+        run: |
+          mkdir -pv ${{ env.BUILD_WORKSPACE_NAME }}
+
+      - name: Download Debian Cloud Image
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          wget -q https://cloud.debian.org/images/cloud/bookworm/20231210-1591/debian-12-generic-amd64-20231210-1591.qcow2
+
+      - name: Install qemu-img
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          sudo apt-get install qemu-utils
+
+      - name: Install virt-customize
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          sudo apt install -y libguestfs-tools
+          which virt-customize
+
+      - name: Resize Image
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          sudo mv debian-12-generic-amd64-20231210-1591.qcow2 debian-12-generic-amd64-20231210-1591.bak.qcow2
+          sudo qemu-img info debian-12-generic-amd64-20231210-1591.bak.qcow2
+          sudo virt-filesystems --long -h --all -a debian-12-generic-amd64-20231210-1591.bak.qcow2
+          sudo virt-df debian-12-generic-amd64-20231210-1591.bak.qcow2
+          sudo qemu-img create -f qcow2 debian-12-generic-amd64-20231210-1591.qcow2 8G
+          sudo virt-resize --expand /dev/sda1 debian-12-generic-amd64-20231210-1591.bak.qcow2 debian-12-generic-amd64-20231210-1591.qcow2
+          sudo qemu-img info debian-12-generic-amd64-20231210-1591.qcow2
+          sudo virt-filesystems --long -h --all -a debian-12-generic-amd64-20231210-1591.qcow2
+          sudo virt-df debian-12-generic-amd64-20231210-1591.qcow2
+          rm -rf debian-12-generic-amd64-20231210-1591.bak.qcow2
+
+      - name: Customize Debian Cloud Image 1.0
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          cp -a ../cloud-image-debian/src/debian12/ ./
+          sudo apt-get install -y whois
+          USER_PWD_LIVE=$(echo ${{ secrets.DEBIAN_CLOUD_USER_PASSWORD }} | sudo mkpasswd -m sha-512 -s)
+          USER_PWD_LIVE=$(echo $USER_PWD_LIVE | sed 's#\/#\\\/#g')
+          USER_PWD_LIVE=$(echo $USER_PWD_LIVE | sed 's#\$#\\\$#g')
+          ROOT_USER_PWD_LIVE=${{ secrets.DEBIAN_CLOUD_ROOT_USER_PASSWORD }}
+          eval sudo sed -i -e 's/DEBIAN_PASSWORD_TO_SET/$USER_PWD_LIVE/' debian12/cloud-init/cloud.cfg.d/customize_user_cloud.cfg
+          eval sudo sed -i -e 's/DEBIAN_ROOT_PASSWORD_TO_SET/$ROOT_USER_PWD_LIVE/' debian12/scripts/final/exec-final.sh
+          USER_PWD_LIVE=""
+          ROOT_USER_PWD_LIVE=""
+          tar -zcf debian12.tar.gz debian12
+          echo 'https://wiki.debian.org/Shell #Non-interactive Shell -> From DebianSqueeze to DebianBullseye, it was possible to select bash as the target of the /bin/sh symlink (by running dpkg-reconfigure dash). As of DebianBookworm, this is no longer supported.'
+          sudo virt-customize -v -a debian-12-generic-amd64-20231210-1591.qcow2 --run-command 'ln -sf /bin/bash /bin/sh'
+          sudo virt-customize -v -a debian-12-generic-amd64-20231210-1591.qcow2 --mkdir /opt/cloud/ --upload ./debian12.tar.gz:/opt/cloud/debian12.tar.gz --run debian12/scripts/cloud-init.sh
+
+      - name: Upload To Ali OSS
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          sudo apt install -y zip
+          sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
+          eval sudo sed -i -e 's/LANGUAGE_TO_SET/${{ secrets.ALI_OSS_CONF_LANGUAGE }}/' \
+                           -e 's/ENDPOINT_TO_SET/${{ secrets.ALI_OSS_CONF_ENDPOINT }}/' \
+                           -e 's/ACCESS_KEY_ID_TO_SET/${{ secrets.ALI_OSS_CONF_ACCESS_KEY_ID }}/' \
+                           -e 's/ACCESS_KEY_SECRET_TO_SET/${{ secrets.ALI_OSS_CONF_ACCESS_KEY_SECRET }}/' ../cloud-image-debian/src/debian12/oss/conf/alioss.conf
+          sudo ossutil64 -c ../cloud-image-debian/src/debian12/oss/conf/alioss.conf cp -f debian-12-generic-amd64-20231210-1591.qcow2  ${{ secrets.ALI_OSS_CONF_CLOUD_IMAGE_DEBIAN_BUCKET }}debian-12-generic-amd64-20231210-1591-1.0.qcow2

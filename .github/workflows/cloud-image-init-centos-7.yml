@@ -1,0 +1,39 @@
+name: CentOS 7 Init Cloud Image Workflow
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  BUILD_WORKSPACE_NAME: workspace
+
+jobs:
+  build:
+    name: CentOS 7 Cloud Init Image Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+        with:
+          submodules: recursive
+
+      - name: Create Workspace
+        run: |
+          mkdir -pv ${{ env.BUILD_WORKSPACE_NAME }}
+
+      - name: Download CentOS Cloud Image
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          wget -q https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-2211.qcow2
+
+      - name: Upload To Ali OSS
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          sudo apt install -y zip
+          sudo -v ; curl https://gosspublic.alicdn.com/ossutil/install.sh | sudo bash
+          eval sudo sed -i -e 's/LANGUAGE_TO_SET/${{ secrets.ALI_OSS_CONF_LANGUAGE }}/' \
+                           -e 's/ENDPOINT_TO_SET/${{ secrets.ALI_OSS_CONF_ENDPOINT }}/' \
+                           -e 's/ACCESS_KEY_ID_TO_SET/${{ secrets.ALI_OSS_CONF_ACCESS_KEY_ID }}/' \
+                           -e 's/ACCESS_KEY_SECRET_TO_SET/${{ secrets.ALI_OSS_CONF_ACCESS_KEY_SECRET }}/' ../cloud-image-centos/src/centos7/oss/conf/alioss.conf
+          sudo ossutil64 -c ../cloud-image-centos/src/centos7/oss/conf/alioss.conf cp -f CentOS-7-x86_64-GenericCloud-2211.qcow2  ${{ secrets.ALI_OSS_CONF_CLOUD_IMAGE_CENTOS_BUCKET }}CentOS-7-x86_64-GenericCloud-2211.qcow2

@@ -1,0 +1,66 @@
+name: OpenJDK 17_0_2-bullseye Docker Workflow
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  SOURCE_IMAGE: openjdk:17.0.2-bullseye
+  DOCKERHUB_IMAGE: fakebilly/openjdk:17.0.2-bullseye
+  GCHR_DOCKERHUB_IMAGE: openjdk:17.0.2-bullseye
+  ALI_DOCKERHUB_IMAGE: monet/openjdk:17.0.2-bullseye
+
+jobs:
+  build:
+    name: OpenJDK 17_0_2-bullseye Image Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: GCHR Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.GCHR_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.GCHR_DOCKERHUB_TOKEN }}
+
+      - name: Ali Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.ALI_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.ALI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.ALI_DOCKERHUB_TOKEN }}
+
+      - name: Docker Pull
+        run: |
+          docker pull ${{ env.SOURCE_IMAGE }}
+
+      - name: Tag and Push and Remove Docker Images
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ env.DOCKERHUB_IMAGE }}
+          docker push ${{ env.DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove GCHR Docker Images
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker push ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker rmi ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Ali Docker Images
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+
+      - name: Remove Source Docker Images
+        run: |
+          docker rmi ${{ env.SOURCE_IMAGE }}

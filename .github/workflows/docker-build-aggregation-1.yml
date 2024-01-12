@@ -1,0 +1,65 @@
+name: Aggregation Docker Build 1 Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  elasticsearch-7-16-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-elasticsearch-7_16_3.yml
+    secrets: inherit
+  elasticsearch-8-11-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-elasticsearch-8_11_3.yml
+    secrets: inherit
+  grafana-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-grafana.yml
+    secrets: inherit
+  kafka-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-kafka.yml
+    secrets: inherit
+  kibana-7-16-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-kibana-7_16_3.yml
+    secrets: inherit
+  kibana-8-11-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-kibana-8_11_3.yml
+    secrets: inherit
+  logstash-7-16-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-logstash-7_16_3.yml
+    secrets: inherit
+  logstash-8-11-3-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-logstash-8_11_3.yml
+    secrets: inherit
+  mysql-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-mysql.yml
+    secrets: inherit
+  nacos-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-nacos.yml
+    secrets: inherit
+  nginx-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-nginx.yml
+    secrets: inherit
+  prometheus-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-prometheus.yml
+    secrets: inherit
+  redis-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-redis.yml
+    secrets: inherit
+  rocketmq-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-rocketmq.yml
+    secrets: inherit
+  skywalking-oap-server-8-9-0-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-skywalking-oap-server-8_9_0.yml
+    secrets: inherit
+  skywalking-oap-server-9-6-0-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-skywalking-oap-server-9_6_0.yml
+    secrets: inherit
+  skywalking-ui-8-9-0-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-skywalking-ui-8_9_0.yml
+    secrets: inherit
+  skywalking-ui-9-6-0-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-skywalking-ui-9_6_0.yml
+    secrets: inherit
+  zookeeper-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-zookeeper.yml
+    secrets: inherit
+
+

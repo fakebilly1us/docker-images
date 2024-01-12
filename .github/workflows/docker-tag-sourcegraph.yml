@@ -1,0 +1,273 @@
+name: Sourcegraph Tag Docker Workflow
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  DOCKERHUB_IMAGE: fakebilly
+  ALI_DOCKERHUB_IMAGE: monet
+
+jobs:
+  build:
+    name: Sourcegraph Tag Image Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+        with:
+          submodules: recursive
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Ali Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ${{ secrets.ALI_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.ALI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.ALI_DOCKERHUB_TOKEN }}
+
+      - name: Tag and Push and Remove Docker Images - alpine
+        run: |
+          docker pull sourcegraph/alpine-3.14:5.2.5
+          
+          docker tag sourcegraph/alpine-3.14:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - alpine
+        run: |
+          docker tag sourcegraph/alpine-3.14:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-alpine-3.14:5.2.5
+          docker rmi sourcegraph/alpine-3.14:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - cadvisor
+        run: |
+          docker pull sourcegraph/cadvisor:5.2.5
+          
+          docker tag sourcegraph/cadvisor:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - cadvisor
+        run: |
+          docker tag sourcegraph/cadvisor:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-cadvisor:5.2.5
+          docker rmi sourcegraph/cadvisor:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - qdrant
+        run: |
+          docker pull sourcegraph/qdrant:5.2.5
+          
+          docker tag sourcegraph/qdrant:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - qdrant
+        run: |
+          docker tag sourcegraph/qdrant:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-qdrant:5.2.5
+          docker rmi sourcegraph/qdrant:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - frontend
+        run: |
+          docker pull sourcegraph/frontend:5.2.5
+          
+          docker tag sourcegraph/frontend:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - frontend
+        run: |
+          docker tag sourcegraph/frontend:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-frontend:5.2.5
+          docker rmi sourcegraph/frontend:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - migrator
+        run: |
+          docker pull sourcegraph/migrator:5.2.5
+          
+          docker tag sourcegraph/migrator:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - migrator
+        run: |
+          docker tag sourcegraph/migrator:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-migrator:5.2.5
+          docker rmi sourcegraph/migrator:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - gitserver
+        run: |
+          docker pull sourcegraph/gitserver:5.2.5
+          
+          docker tag sourcegraph/gitserver:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - gitserver
+        run: |
+          docker tag sourcegraph/gitserver:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-gitserver:5.2.5
+          docker rmi sourcegraph/gitserver:5.2.5
+
+      - name: Tag and Push and Remove Docker Images - indexed-searcher
+        run: |
+          docker pull sourcegraph/indexed-searcher:5.2.5
+          
+          docker tag sourcegraph/indexed-searcher:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - indexed-searcher
+        run: |
+          docker tag sourcegraph/indexed-searcher:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-indexed-searcher:5.2.5
+          docker rmi sourcegraph/indexed-searcher:5.2.5
+
+      - name: Tag and Push and Remove Docker Images - search-indexer
+        run: |
+          docker pull sourcegraph/search-indexer:5.2.5
+          
+          docker tag sourcegraph/search-indexer:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - search-indexer
+        run: |
+          docker tag sourcegraph/search-indexer:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-search-indexer:5.2.5
+          docker rmi sourcegraph/search-indexer:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - blobstore
+        run: |
+          docker pull sourcegraph/blobstore:5.2.5
+          
+          docker tag sourcegraph/blobstore:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - blobstore
+        run: |
+          docker tag sourcegraph/blobstore:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-blobstore:5.2.5
+          docker rmi sourcegraph/blobstore:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - precise-code-intel-worker
+        run: |
+          docker pull sourcegraph/precise-code-intel-worker:5.2.5
+          
+          docker tag sourcegraph/precise-code-intel-worker:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - precise-code-intel-worker
+        run: |
+          docker tag sourcegraph/precise-code-intel-worker:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-precise-code-intel-worker:5.2.5
+          docker rmi sourcegraph/precise-code-intel-worker:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - repo-updater
+        run: |
+          docker pull sourcegraph/repo-updater:5.2.5
+          
+          docker tag sourcegraph/repo-updater:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - repo-updater
+        run: |
+          docker tag sourcegraph/repo-updater:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-repo-updater:5.2.5
+          docker rmi sourcegraph/repo-updater:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - searcher
+        run: |
+          docker pull sourcegraph/searcher:5.2.5
+          
+          docker tag sourcegraph/searcher:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - searcher
+        run: |
+          docker tag sourcegraph/searcher:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-searcher:5.2.5
+          docker rmi sourcegraph/searcher:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - symbols
+        run: |
+          docker pull sourcegraph/symbols:5.2.5
+          
+          docker tag sourcegraph/symbols:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - symbols
+        run: |
+          docker tag sourcegraph/symbols:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-symbols:5.2.5
+          docker rmi sourcegraph/symbols:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - syntax-highlighter
+        run: |
+          docker pull sourcegraph/syntax-highlighter:5.2.5
+          
+          docker tag sourcegraph/syntax-highlighter:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - syntax-highlighter
+        run: |
+          docker tag sourcegraph/syntax-highlighter:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-syntax-highlighter:5.2.5
+          docker rmi sourcegraph/syntax-highlighter:5.2.5
+          
+      - name: Tag and Push and Remove Docker Images - worker
+        run: |
+          docker pull sourcegraph/worker:5.2.5
+          
+          docker tag sourcegraph/worker:5.2.5 ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+          docker push ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+
+      - name: Tag and Push and Remove Ali Docker Images - worker
+        run: |
+          docker tag sourcegraph/worker:5.2.5 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/sourcegraph-worker:5.2.5
+          docker rmi sourcegraph/worker:5.2.5
+
+      - name: Tag and Push and Remove Docker Images - postgresql
+        run: |
+          docker pull bitnami/postgresql:15.4.0-debian-11-r45
+          
+          docker tag bitnami/postgresql:15.4.0-debian-11-r45 ${{ env.DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+          docker push ${{ env.DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+
+      - name: Tag and Push and Remove Ali Docker Images - postgresql
+        run: |
+          docker tag bitnami/postgresql:15.4.0-debian-11-r45 ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}/postgresql:15.4.0-debian-11-r45
+          docker rmi bitnami/postgresql:15.4.0-debian-11-r45

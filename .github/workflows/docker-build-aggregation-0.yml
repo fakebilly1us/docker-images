@@ -1,0 +1,59 @@
+name: Aggregation Docker Build 0 Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  centos-7-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-centos-7.yml
+    secrets: inherit
+  centos-8-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-centos-8.yml
+    secrets: inherit
+  debian-11-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-debian-11.yml
+    secrets: inherit
+  debian-12-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-debian-12.yml
+    secrets: inherit
+  ubuntu-20-04-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-ubuntu-20_04.yml
+    secrets: inherit
+  ubuntu-22-04-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-ubuntu-22_04.yml
+    secrets: inherit
+  maven-3-6-openjdk-8-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-maven-3-6-openjdk-8.yml
+    secrets: inherit
+  maven-3-6-openjdk-17-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-maven-3-6-openjdk-17.yml
+    secrets: inherit
+  maven-3-8-openjdk-8-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-maven-3-8-openjdk-8.yml
+    secrets: inherit
+  maven-3-8-openjdk-17-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-maven-3-8-openjdk-17.yml
+    secrets: inherit
+  openjdk-8u342-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-8u342.yml
+    secrets: inherit
+  openjdk-8u342-oracle-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-8u342-oracle.yml
+    secrets: inherit
+  openjdk-8u342-oraclelinux7-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-8u342-oraclelinux7.yml
+    secrets: inherit
+  openjdk-17-0-2-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-17-0-2.yml
+    secrets: inherit
+  openjdk-17-0-2-oracle-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-17-0-2-bullseye.yml
+    secrets: inherit
+  openjdk-17-0-2-oraclelinux7-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-openjdk-17-0-2-oraclelinux7.yml
+    secrets: inherit    
+    
+    
+
+
+

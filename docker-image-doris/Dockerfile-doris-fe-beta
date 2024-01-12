@@ -1,0 +1,31 @@
+# 选择基础镜像
+FROM openjdk:8u342-jdk
+
+ARG DORIS_VERSION="1.2.7.1"
+
+# 设置环境变量
+ENV JAVA_HOME="/usr/local/openjdk-8" \
+    PATH="/opt/apache-doris/fe/bin:$PATH" \
+    DEBIAN_FRONTEND=noninteractive
+
+# 下载软件至镜像内，可根据需要替换
+#ADD ./resource/apache-doris-fe-${x.x.x}-bin.tar.gz /opt/
+
+RUN apt-get update && \
+    apt-get install -y default-mysql-client wget vim curl net-tools && \
+    apt-get clean && \
+    wget -qO /opt/apache-doris-bin-x64.tar.gz https://apache-doris-releases.oss-accelerate.aliyuncs.com/apache-doris-${DORIS_VERSION}-bin-x64.tar.xz && \
+    tar -xf /opt/apache-doris-bin-x64.tar.gz -C /opt/ && \
+    cd /opt && \
+    mv /opt/apache-doris-${DORIS_VERSION}-bin-x64 /opt/apache-doris && \
+    mv /opt/apache-doris/extensions/apache_hdfs_broker /opt/apache-doris/fe/ && \
+    mv /opt/apache-doris/extensions/audit_loader /opt/apache-doris/fe/ && \
+    mv /opt/apache-doris/fe/bin/start_fe.sh /opt/apache-doris/fe/bin/start_fe_bak.sh && \
+    rm -rf /opt/apache-doris-bin-x64.tar.gz /opt/apache-doris/extensions /opt/apache-doris/be
+
+COPY ./src/doris-fe/*.sh /opt/apache-doris/fe/bin
+RUN chmod 755 /opt/apache-doris/fe/bin/init_fe.sh && \
+    chmod 755 /opt/apache-doris/fe/bin/start_fe.sh && \
+    chmod 755 /opt/apache-doris/fe/bin/check_register_fe.sh
+
+ENTRYPOINT ["/opt/apache-doris/fe/bin/init_fe.sh"]

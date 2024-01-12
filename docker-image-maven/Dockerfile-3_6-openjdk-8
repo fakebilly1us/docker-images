@@ -1,0 +1,6 @@
+ARG BASE_TAG="3.6-openjdk-8"
+ARG BASE_IMAGE="maven"
+FROM $BASE_IMAGE:$BASE_TAG
+
+LABEL maintainer="fakebilly.work@outlook.com"
+LABEL org.opencontainers.image.authors="FakeBilly"

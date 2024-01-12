@@ -1,0 +1,59 @@
+name: Aggregation Docker Tag 0 Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  centos-7-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-centos-7.yml
+    secrets: inherit
+  centos-8-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-centos-8.yml
+    secrets: inherit
+  debian-11-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-debian-11.yml
+    secrets: inherit
+  debian-12-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-debian-12.yml
+    secrets: inherit
+  ubuntu-20-04-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-ubuntu-20_04.yml
+    secrets: inherit
+  ubuntu-22-04-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-ubuntu-22_04.yml
+    secrets: inherit
+  maven-3-6-openjdk-8-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-maven-3-6-openjdk-8.yml
+    secrets: inherit
+  maven-3-6-openjdk-17-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-maven-3-6-openjdk-17.yml
+    secrets: inherit
+  maven-3-8-openjdk-8-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-maven-3-8-openjdk-8.yml
+    secrets: inherit
+  maven-3-8-openjdk-17-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-maven-3-8-openjdk-17.yml
+    secrets: inherit
+  openjdk-8u342-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-8u342.yml
+    secrets: inherit
+  openjdk-8u342-oracle-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-8u342-oracle.yml
+    secrets: inherit
+  openjdk-8u342-oraclelinux7-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-8u342-oraclelinux7.yml
+    secrets: inherit
+  openjdk-17-0-2-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-17-0-2.yml
+    secrets: inherit
+  openjdk-17-0-2-oracle-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-17-0-2-bullseye.yml
+    secrets: inherit
+  openjdk-17-0-2-oraclelinux7-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-openjdk-17-0-2-oraclelinux7.yml
+    secrets: inherit
+
+
+
+
+

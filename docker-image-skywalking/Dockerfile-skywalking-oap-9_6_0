@@ -1,0 +1,6 @@
+ARG BASE_TAG="9.6.0"
+ARG BASE_IMAGE="apache/skywalking-oap-server"
+FROM $BASE_IMAGE:$BASE_TAG
+
+LABEL maintainer="fakebilly.work@outlook.com"
+LABEL org.opencontainers.image.authors="FakeBilly"

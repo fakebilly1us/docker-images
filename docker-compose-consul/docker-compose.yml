@@ -1,0 +1,74 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  consul-server-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/consul/server/data
+      o: bind
+  consul-server-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/consul/server/config
+      o: bind
+  consul-client-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/consul/client/data
+      o: bind
+  consul-client-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/consul/client/config
+      o: bind
+
+services:
+  consul-server:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/consul:1.16.4
+    container_name: consul-server
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - consul-server-data:/opt/consul/data
+      - consul-server-config:/opt/consul/conf
+    command: agent -server -client=0.0.0.0 -node=consul-server -bind=0.0.0.0 -datacenter=dc1 -bootstrap-expect=1 -config-dir=/opt/consul/conf -data-dir=/opt/consul/data
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    networks:
+      - monet_network
+  consul-client:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/consul:1.16.4
+    container_name: consul-client
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - consul-client-data:/opt/consul/data
+      - consul-client-config:/opt/consul/conf
+    command: agent -ui -client=0.0.0.0 -node=consul-clinet-1 -bind=0.0.0.0 -datacenter=dc1 -retry-join=consul-server -config-dir=/opt/consul/conf -data-dir=/opt/consul/data
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18500:8500"
+    networks:
+      - monet_network
+    depends_on:
+      - consul-server
+

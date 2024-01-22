@@ -1,0 +1,5 @@
+server.publicBaseUrl: "http://127.0.0.1:15601"
+elasticsearch:
+  username: "kibana_system"
+  password: "LZ4N4jUFbg5C"
+i18n.locale: "zh-CN"

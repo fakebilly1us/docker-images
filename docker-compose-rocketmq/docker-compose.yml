@@ -1,0 +1,75 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  rocketmq-namesrv-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/namesrv/logs
+      o: bind
+  rocketmq-broker-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/broker/store
+      o: bind
+  rocketmq-broker-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/broker/logs
+      o: bind
+
+services:
+  rocketmq-nameserver:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq:4.9.7
+    container_name: rocketmq-nameserver
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPT_EXT: '-server -Xms512m -Xmx512m'
+    volumes:
+      - rocketmq-namesrv-logs:/home/rocketmq/logs
+    command: sh mqnamesrv
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19876:9876"
+    networks:
+      - monet_network
+  rocketmq-broker:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq:4.9.7
+    container_name: rocketmq-broker
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPT_EXT: '-server -Xms512M -Xmx512M -Xmn256m'
+      NAMESRV_ADDR: rocketmq-nameserver:9876
+    volumes:
+      - rocketmq-broker-store:/home/rocketmq/store
+      - /opt/docker/rocketmq/broker/config/broker.conf:/home/rocketmq/rocketmq-4.9.7/conf/broker.conf
+      - rocketmq-broker-logs:/home/rocketmq/logs/rocketmqlogs
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.7/conf/broker.conf
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "10911:10911"
+      - "10909:10909"
+      - "10912:10912"
+    networks:
+      - monet_network
+    depends_on:
+      - rocketmq-nameserver
+

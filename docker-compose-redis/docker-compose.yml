@@ -1,0 +1,49 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  redis-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/data
+      o: bind
+  redis-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/config
+      o: bind
+  redis-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/logs
+      o: bind
+
+services:
+  redis:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/redis:6.2.13-alpine
+    container_name: redis
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - redis-data:/opt/data
+      - redis-config:/opt/config
+      - redis-logs:/opt/logs
+    command: redis-server /opt/config/redis.conf
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "16379:6379"
+    networks:
+      - monet_network
+

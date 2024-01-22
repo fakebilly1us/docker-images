@@ -1,0 +1,51 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  grafana-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/grafana/data
+      o: bind
+  grafana-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/grafana/config
+      o: bind
+
+services:
+  grafana:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/grafana:10.1.2
+    container_name: grafana
+    environment:
+      TZ: Asia/Shanghai
+      GF_AUTH_LDAP_ALLOW_SIGN_UP: 'false'
+      GF_AUTH_LDAP_ENABLED: 'false'
+      GF_AUTH_LDAP_CONFIG_FILE: /opt/grafana/conf/ldap.toml
+      GF_PATHS_CONFIG: /opt/grafana/conf/grafana.ini
+      GF_PATHS_DATA: /opt/grafana/data
+      GF_PATHS_LOGS: /opt/grafana/data/logs
+      GF_PATHS_PLUGINS: /opt/grafana/data/plugins
+      GF_PATHS_PROVISIONING: /opt/grafana/conf/provisioning
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: LZ4N4jUFbg5C
+    volumes:
+      - grafana-config:/opt/grafana/conf
+      - grafana-data:/opt/grafana/data
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "13000:3000"
+    networks:
+      - monet_network
+

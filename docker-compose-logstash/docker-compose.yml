@@ -1,0 +1,58 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  logstash-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/logstash/data
+      o: bind
+  logstash-pipeline:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/logstash/pipeline
+      o: bind
+  logstash-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/logstash/config
+      o: bind
+  logstash-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/logstash/logs
+      o: bind
+
+services:
+  mysql:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/logstash:7.16.3
+    container_name: logstash
+    environment:
+      TZ: Asia/Shanghai
+      LS_JAVA_OPTS: '-Xms512m -Xmx512m'
+    volumes:
+      - logstash-data:/usr/share/logstash/data
+      - logstash-pipeline:/usr/share/logstash/pipeline
+      - logstash-config:/usr/share/logstash/config
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - '15044:5044'
+      - '50000:50000/tcp'
+      - '50000:50000/udp'
+      - '19600:9600'
+    networks:
+      - monet_network
+

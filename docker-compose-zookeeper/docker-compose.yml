@@ -1,0 +1,57 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  zookeeper-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/config
+      o: bind
+  zookeeper-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/data
+      o: bind
+  zookeeper-data-log:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/data-log
+      o: bind
+  zookeeper-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/logs
+      o: bind
+
+services:
+  zookeeper:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/zookeeper:3.8.2
+    container_name: zookeeper
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - zookeeper-config:/conf
+      - zookeeper-data:/data
+      - zookeeper-data-log:/datalog
+      - zookeeper-logs:/logs
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "12181:2181"
+      - "12888:2888"
+      - "13888:3888"
+    networks:
+      - monet_network
+

@@ -1,0 +1,51 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  kibana-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/data
+      o: bind
+  kibana-plugins:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/plugins
+      o: bind
+  kibana-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/config
+      o: bind
+
+services:
+  kibana:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/kibana:7.16.3
+    container_name: kibana
+    environment:
+      TZ: Asia/Shanghai
+      NODE_OPTIONS: '--max-old-space-size=1800'
+      SERVER_HOST: 0.0.0.0
+      ELASTICSEARCH_HOSTS: http://es:9200
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+      - kibana-plugins:/usr/share/kibana/plugins
+      - kibana-config:/usr/share/kibana/config
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "15601:5601"
+    networks:
+      - monet_network
+

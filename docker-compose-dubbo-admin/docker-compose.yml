@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+services:
+  dubbo-admin:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/dubbo-admin:0.6.0
+    container_name: dubbo-admin
+    environment:
+      TZ: Asia/Shanghai
+      admin.registry.address: zookeeper://zookeeper:2181
+      admin.config-center: zookeeper://zookeeper:2181
+      admin.metadata-report.address: zookeeper://zookeeper:2181
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18080:38080"
+    networks:
+      - monet_network
+

@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+services:
+  rocketmq-dashboard:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq-dashboard:1.0.0
+    container_name: rocketmq-dashboard
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: '-Xms512M -Xmx512M -Xmn256m -Drocketmq.namesrv.addr=rocketmq-nameserver:9876'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18080:8080"
+    networks:
+      - monet_network
+

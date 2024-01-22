@@ -1,0 +1,56 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  mysql-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/data
+      o: bind
+  mysql-init:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/init
+      o: bind
+  mysql-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/config
+      o: bind
+  mysql-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/logs
+      o: bind
+
+services:
+  mysql:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/mysql:8.0.34
+    container_name: mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: LZ4N4jUFbg5C
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-config:/etc/mysql/conf.d
+      - mysql-logs:/logs
+      - mysql-init:/docker-entrypoint-initdb.d
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "13306:3306"
+    networks:
+      - monet_network
+

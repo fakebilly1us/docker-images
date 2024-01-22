@@ -1,0 +1,28 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+services:
+  kafka-ui:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/provectuslabs-kafka-ui:latest
+    container_name: kafka-ui
+    environment:
+      TZ: Asia/Shanghai
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+      KAFKA_CLUSTERS_0_READONLY: true
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18080:8080"
+    networks:
+      - monet_network
+

@@ -1,0 +1,55 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  nginx-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/nginx/data
+      o: bind
+  nginx-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/nginx/config
+      o: bind
+  nginx-www:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/nginx/www
+      o: bind
+  nginx-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/nginx/logs
+      o: bind
+
+services:
+  nginx:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/nginx:1.25.2-alpine
+    container_name: nginx
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - nginx-data:/usr/share/nginx/html
+      - nginx-config:/etc/nginx/conf.d
+      - nginx-www:/var/www
+      - nginx-logs:/var/log/nginx
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18085:80"
+    networks:
+      - monet_network
+

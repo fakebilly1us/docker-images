@@ -1,0 +1,5 @@
+{
+  "acl_datacenter": "dc1",
+  "acl_master_token": "e3931356-c7d2-4fb8-9b85-43154d135e07",
+  "acl_default_policy": "deny"
+}

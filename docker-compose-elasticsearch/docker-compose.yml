@@ -1,0 +1,57 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  es-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/data
+      o: bind
+  es-plugins:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/plugins
+      o: bind
+  es-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/config
+      o: bind
+  es-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/logs
+      o: bind
+
+services:
+  elasticsearch:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/elasticsearch:7.16.3
+    container_name: elasticsearch
+    environment:
+      TZ: Asia/Shanghai
+      ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+      - es-plugins:/usr/share/elasticsearch/plugins
+      - es-config:/usr/share/elasticsearch/config
+      - es-logs:/usr/share/elasticsearch/logs
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19200:9200"
+      - "19300:9300"
+    networks:
+      - monet_network
+

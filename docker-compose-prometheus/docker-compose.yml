@@ -1,0 +1,101 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  prometheus-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/data
+      o: bind
+  prometheus-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/config
+      o: bind
+  prometheus-alertmanager-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/alertmanager/data
+      o: bind
+  prometheus-alertmanager-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/alertmanager/config
+      o: bind
+
+services:
+  prometheus:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prometheus:v2.47.0
+    container_name: prometheus
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - prometheus-config:/etc/config
+      - prometheus-data:/data
+    command:
+      - '--config.file=/etc/config/prometheus.yml'
+      - '--storage.tsdb.path=/data'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19090:9090"
+    networks:
+      - monet_network
+    depends_on:
+      - prometheus-alertmanager
+  prometheus-alertmanager:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prom-alertmanager:v0.26.0
+    container_name: prometheus-alertmanager
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - prometheus-alertmanager-config:/etc/config
+      - prometheus-alertmanager-data:/data
+    command:
+      - '--config.file=/etc/config/alertmanager.yml'
+      - '--storage.path=/data'
+      - '--cluster.listen-address='
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19093:9093"
+    networks:
+      - monet_network
+  prometheus-pushgateway:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prom-pushgateway:v1.7.0
+    container_name: prometheus-pshgateway
+    environment:
+      TZ: Asia/Shanghai
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19091:9091"
+    networks:
+      - monet_network
+

@@ -34,3 +34,24 @@ jobs:
   redis-alpine-docker-tag-call-workflow:
     uses: ./.github/workflows/docker-tag-redis-alpine.yml
     secrets: inherit
+  cadvisor-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-cadvisor.yml
+    secrets: inherit
+  alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-alpine.yml
+    secrets: inherit
+  busybox-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-busybox.yml
+    secrets: inherit
+  postgres-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-postgres.yml
+    secrets: inherit
+  postgres-alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-postgres-alpine.yml
+    secrets: inherit
+  mongo-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-mongo.yml
+    secrets: inherit
+  mongo-express-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-mongo-express.yml
+    secrets: inherit

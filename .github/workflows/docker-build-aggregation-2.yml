@@ -31,3 +31,25 @@ jobs:
   redis-alpine-docker-build-call-workflow:
     uses: ./.github/workflows/docker-build-redis-alpine.yml
     secrets: inherit
+  cadvisor-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-cadvisor.yml
+    secrets: inherit
+  alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-alpine.yml
+    secrets: inherit
+  busybox-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-busybox.yml
+    secrets: inherit
+  postgres-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-postgres.yml
+    secrets: inherit
+  postgres-alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-postgres-alpine.yml
+    secrets: inherit
+  mongo-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-mongo.yml
+    secrets: inherit
+  mongo-express-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-mongo-express.yml
+    secrets: inherit
+

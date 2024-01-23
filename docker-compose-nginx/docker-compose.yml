@@ -34,7 +34,7 @@ services:
   nginx:
     restart: always
     privileged: true
-    image: registry.cn-beijing.aliyuncs.com/monet/nginx:1.25.2-alpine
+    image: registry.cn-beijing.aliyuncs.com/monet/nginx:1.24.0
     container_name: nginx
     environment:
       TZ: Asia/Shanghai

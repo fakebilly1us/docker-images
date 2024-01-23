@@ -28,7 +28,7 @@ services:
   redis:
     restart: always
     privileged: true
-    image: registry.cn-beijing.aliyuncs.com/monet/redis:6.2.13-alpine
+    image: registry.cn-beijing.aliyuncs.com/monet/redis:6.2.13
     container_name: redis
     environment:
       TZ: Asia/Shanghai

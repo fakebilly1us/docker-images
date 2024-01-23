@@ -7,4 +7,30 @@ jobs:
   proxy-git-sync-docker-tag-call-workflow:
     uses: ./.github/workflows/docker-tag-proxy-git-sync.yml
     secrets: inherit
-
+  kafka-ui-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-kafka-ui.yml
+    secrets: inherit
+  dubbo-admin-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-dubbo-admin.yml
+    secrets: inherit
+  rocketmq-dashboard-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-rocketmq-dashboard.yml
+    secrets: inherit
+  prom-pushgateway-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-prometheus-pushgateway.yml
+    secrets: inherit
+  prom-alertmanager-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-prometheus-alertmanager.yml
+    secrets: inherit
+  consul-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-consul.yml
+    secrets: inherit
+  prom-promlens-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-prometheus-promlens.yml
+    secrets: inherit
+  nginx-alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-nginx-alpine.yml
+    secrets: inherit
+  redis-alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-redis-alpine.yml
+    secrets: inherit

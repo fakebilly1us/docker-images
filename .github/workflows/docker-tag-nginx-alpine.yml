@@ -1,17 +1,18 @@
-name: Redis Beta Docker Workflow
+name: Nginx Alpine Tag Docker Workflow
 
 on:
   workflow_dispatch:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13-beta
-  GCHR_DOCKERHUB_IMAGE: redis:6.2.13-beta
-  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13-beta
+  SOURCE_IMAGE: nginx:1.24.0-alpine
+  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0-alpine
+  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0-alpine
+  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0-alpine
 
 jobs:
   build:
-    name: Redis Beta Image Build
+    name: Nginx Alpine Tag Image Build
     runs-on: ubuntu-20.04
 
     steps:
@@ -40,30 +41,28 @@ jobs:
           username: ${{ secrets.ALI_DOCKERHUB_USERNAME }}
           password: ${{ secrets.ALI_DOCKERHUB_TOKEN }}
 
-      - name: Build and Push Docker Images
-        uses: docker/build-push-action@v5.0.0
-        with:
-          platforms: |
-            linux/amd64
-          build-args:
-          context: docker-image-redis
-          file: docker-image-redis/Dockerfile
-          no-cache: true
-          push: true
-          tags: ${{ env.DOCKERHUB_IMAGE }}
+      - name: Docker Pull
+        run: |
+          docker pull ${{ env.SOURCE_IMAGE }}
+
+      - name: Tag and Push and Remove Docker Images
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ env.DOCKERHUB_IMAGE }}
+          docker push ${{ env.DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}
 
       - name: Tag and Push and Remove GCHR Docker Images
         run: |
-          docker tag ${{ env.DOCKERHUB_IMAGE }} ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
           docker push ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
           docker rmi ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
 
       - name: Tag and Push and Remove Ali Docker Images
         run: |
-          docker tag ${{ env.DOCKERHUB_IMAGE }} ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
           docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
           docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
 
-      - name: Remove Docker Images
+      - name: Remove Source Docker Images
         run: |
-          docker rmi ${{ env.DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.SOURCE_IMAGE }}

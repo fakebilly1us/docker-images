@@ -5,10 +5,10 @@ on:
   workflow_call:
 
 env:
-  SOURCE_IMAGE: nginx:1.25.2-alpine
-  DOCKERHUB_IMAGE: fakebilly/nginx:1.25.2-alpine
-  GCHR_DOCKERHUB_IMAGE: nginx:1.25.2-alpine
-  ALI_DOCKERHUB_IMAGE: monet/nginx:1.25.2-alpine
+  SOURCE_IMAGE: nginx:1.24.0
+  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0
+  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0
+  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0
 
 jobs:
   build:

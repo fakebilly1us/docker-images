@@ -1,0 +1,33 @@
+name: Aggregation Docker Build 2 Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  kafka-ui-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-kafka-ui.yml
+    secrets: inherit
+  dubbo-admin-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-dubbo-admin.yml
+    secrets: inherit
+  rocketmq-dashboard-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-rocketmq-dashboard.yml
+    secrets: inherit
+  prom-pushgateway-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-prometheus-pushgateway.yml
+    secrets: inherit
+  prom-alertmanager-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-prometheus-alertmanager.yml
+    secrets: inherit
+  consul-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-consul.yml
+    secrets: inherit
+  prom-promlens-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-prometheus-promlens.yml
+    secrets: inherit
+  nginx-alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-nginx-alpine.yml
+    secrets: inherit
+  redis-alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-redis-alpine.yml
+    secrets: inherit

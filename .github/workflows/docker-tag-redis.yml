@@ -5,10 +5,10 @@ on:
   workflow_call:
 
 env:
-  SOURCE_IMAGE: redis:6.2.13-alpine
-  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13-alpine
-  GCHR_DOCKERHUB_IMAGE: redis:6.2.13-alpine
-  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13-alpine
+  SOURCE_IMAGE: redis:6.2.13
+  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13
+  GCHR_DOCKERHUB_IMAGE: redis:6.2.13
+  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13
 
 jobs:
   build:

@@ -4,9 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  proxy-git-sync-docker-tag-call-workflow:
-    uses: ./.github/workflows/docker-tag-proxy-git-sync.yml
-    secrets: inherit
   kafka-ui-docker-tag-call-workflow:
     uses: ./.github/workflows/docker-tag-kafka-ui.yml
     secrets: inherit
@@ -54,4 +51,16 @@ jobs:
     secrets: inherit
   mongo-express-docker-tag-call-workflow:
     uses: ./.github/workflows/docker-tag-mongo-express.yml
+    secrets: inherit
+  portainer-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-portainer.yml
+    secrets: inherit
+  portainer-alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-portainer-alpine.yml
+    secrets: inherit
+  minio-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-minio.yml
+    secrets: inherit
+  minio-mc-alpine-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-minio-client.yml
     secrets: inherit

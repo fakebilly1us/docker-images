@@ -1,0 +1,9 @@
+name: Aggregation Docker Tag 3 Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  proxy-git-sync-docker-tag-call-workflow:
+    uses: ./.github/workflows/docker-tag-proxy-git-sync.yml
+    secrets: inherit

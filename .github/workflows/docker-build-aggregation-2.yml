@@ -52,4 +52,16 @@ jobs:
   mongo-express-docker-build-call-workflow:
     uses: ./.github/workflows/docker-build-mongo-express.yml
     secrets: inherit
+  portainer-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-portainer.yml
+    secrets: inherit
+  portainer-alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-portainer-alpine.yml
+    secrets: inherit
+  minio-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-minio.yml
+    secrets: inherit
+  minio-mc-alpine-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-minio-client.yml
+    secrets: inherit
 

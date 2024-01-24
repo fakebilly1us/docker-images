@@ -1,0 +1,6 @@
+ARG BASE_TAG="2.19.4-alpine"
+ARG BASE_IMAGE="portainer/portainer-ce"
+FROM $BASE_IMAGE:$BASE_TAG
+
+LABEL maintainer="fakebilly.work@outlook.com"
+LABEL org.opencontainers.image.authors="FakeBilly"

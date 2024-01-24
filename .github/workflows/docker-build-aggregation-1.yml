@@ -28,8 +28,11 @@ jobs:
   logstash-8-11-3-docker-build-call-workflow:
     uses: ./.github/workflows/docker-build-logstash-8_11_3.yml
     secrets: inherit
-  mysql-docker-build-call-workflow:
-    uses: ./.github/workflows/docker-build-mysql.yml
+  mysql-8-0-34-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-mysql-8_0_34.yml
+    secrets: inherit
+  mysql-8-0-34-debian-docker-build-call-workflow:
+    uses: ./.github/workflows/docker-build-mysql-8_0_34-debian.yml
     secrets: inherit
   nacos-docker-build-call-workflow:
     uses: ./.github/workflows/docker-build-nacos.yml

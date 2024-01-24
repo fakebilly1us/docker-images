@@ -1,0 +1,88 @@
+name: Prometheus Promlens Tag Docker Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      step-tag-dispatch:
+        description: 'dispatch step tag if'
+        required: false
+        default: 'Docker,GCHR,Ali'
+        type: choice
+        options:
+          - Docker,GCHR,Ali
+          - Docker,GCHR
+          - Docker,Ali
+          - GCHR,Ali
+          - Docker
+          - GCHR
+          - Ali
+  workflow_call:
+
+env:
+  SOURCE_IMAGE: prom/promlens:v0.3.0
+  DOCKERHUB_IMAGE: fakebilly/prom-promlens:v0.3.0
+  GCHR_DOCKERHUB_IMAGE: prom-promlens:v0.3.0
+  ALI_DOCKERHUB_IMAGE: monet/prom-promlens:v0.3.0
+
+jobs:
+  build:
+    name: Prometheus Promlens Tag Image Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+        with:
+          submodules: recursive
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        if: ${{ contains(inputs.step-tag-dispatch, 'Docker') }}
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: GCHR Docker Login
+        uses: docker/login-action@v3.0.0
+        if: ${{ contains(inputs.step-tag-dispatch, 'GCHR') }}
+        with:
+          registry: ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.GCHR_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.GCHR_DOCKERHUB_TOKEN }}
+
+      - name: Ali Docker Login
+        uses: docker/login-action@v3.0.0
+        if: ${{ contains(inputs.step-tag-dispatch, 'Ali') }}
+        with:
+          registry: ${{ secrets.ALI_DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.ALI_DOCKERHUB_USERNAME }}
+          password: ${{ secrets.ALI_DOCKERHUB_TOKEN }}
+
+      - name: Docker Pull
+        run: |
+          docker pull ${{ env.SOURCE_IMAGE }}
+
+      - name: Tag and Push and Remove Docker Images
+        if: ${{ contains(inputs.step-tag-dispatch, 'Docker') }}
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ env.DOCKERHUB_IMAGE }}
+          docker push ${{ env.DOCKERHUB_IMAGE }}
+          docker rmi ${{ env.DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove GCHR Docker Images
+        if: ${{ contains(inputs.step-tag-dispatch, 'GCHR') }}
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker push ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+          docker rmi ${{ secrets.GCHR_DOCKERHUB_REGISTRY }}/${{ secrets.GCHR_DOCKERHUB_USERNAME }}/${{ env.GCHR_DOCKERHUB_IMAGE }}
+
+      - name: Tag and Push and Remove Ali Docker Images
+        if: ${{ contains(inputs.step-tag-dispatch, 'Ali') }}
+        run: |
+          docker tag ${{ env.SOURCE_IMAGE }} ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+          docker push ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+          docker rmi ${{ secrets.ALI_DOCKERHUB_REGISTRY }}/${{ env.ALI_DOCKERHUB_IMAGE }}
+
+      - name: Remove Source Docker Images
+        run: |
+          docker rmi ${{ env.SOURCE_IMAGE }}

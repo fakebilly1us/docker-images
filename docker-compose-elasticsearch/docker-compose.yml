@@ -5,29 +5,29 @@ networks:
     external: true
 
 volumes:
-  es-data:
+  elasticsearch-data:
     driver: local
     driver_opts:
       type: none
-      device: /opt/docker/es/data
+      device: /opt/docker/elasticsearch/data
       o: bind
-  es-plugins:
+  elasticsearch-plugins:
     driver: local
     driver_opts:
       type: none
-      device: /opt/docker/es/plugins
+      device: /opt/docker/elasticsearch/plugins
       o: bind
-  es-config:
+  elasticsearch-config:
     driver: local
     driver_opts:
       type: none
-      device: /opt/docker/es/config
+      device: /opt/docker/elasticsearch/config
       o: bind
-  es-logs:
+  elasticsearch-logs:
     driver: local
     driver_opts:
       type: none
-      device: /opt/docker/es/logs
+      device: /opt/docker/elasticsearch/logs
       o: bind
 
 services:
@@ -39,11 +39,14 @@ services:
     environment:
       TZ: Asia/Shanghai
       ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+      ELASTIC_PASSWORD_FILE: /run/secrets/elasticsearch_password
     volumes:
-      - es-data:/usr/share/elasticsearch/data
-      - es-plugins:/usr/share/elasticsearch/plugins
-      - es-config:/usr/share/elasticsearch/config
-      - es-logs:/usr/share/elasticsearch/logs
+      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch-plugins:/usr/share/elasticsearch/plugins
+      - elasticsearch-config:/usr/share/elasticsearch/config
+      - elasticsearch-logs:/usr/share/elasticsearch/logs
+    secrets:
+      - elasticsearch_password
     logging:
       driver: 'json-file'
       options:
@@ -55,3 +58,6 @@ services:
     networks:
       - monet_network
 
+secrets:
+  elasticsearch_password:
+    file: /opt/docker/secrets/elasticsearch_password.txt

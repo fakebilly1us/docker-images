@@ -35,10 +35,12 @@ services:
       GF_PATHS_PLUGINS: /opt/grafana/data/plugins
       GF_PATHS_PROVISIONING: /opt/grafana/conf/provisioning
       GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: LZ4N4jUFbg5C
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
     volumes:
       - grafana-config:/opt/grafana/conf
       - grafana-data:/opt/grafana/data
+    secrets:
+      - grafana_admin_password
     logging:
       driver: 'json-file'
       options:
@@ -49,3 +51,6 @@ services:
     networks:
       - monet_network
 
+secrets:
+  grafana_admin_password:
+    file: /opt/docker/secrets/grafana_admin_password.txt

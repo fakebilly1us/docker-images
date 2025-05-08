@@ -1,0 +1,40 @@
+ARG BASE_TAG="11.11"
+ARG BASE_IMAGE="debian"
+FROM $BASE_IMAGE:$BASE_TAG
+
+LABEL maintainer="fakebilly.work@outlook.com"
+LABEL org.opencontainers.image.authors="FakeBilly"
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    INST_DIR=/opt/initialization
+ARG USER_NM=root
+
+COPY --chown=root:root src/ $INST_DIR
+
+RUN apt update \
+    && apt install --no-install-recommends -y sudo dialog apt-utils \
+    && echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
+    && chmod +x $INST_DIR/scripts/init_first.sh && bash $INST_DIR/scripts/init_first.sh \
+    && echo 'root:dev1024' | chpasswd \
+    && echo 'source /etc/profile' >> /root/.bashrc
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    LC_CTYPE=en_US.UTF-8 \
+    LC_NUMERIC=en_US.UTF-8 \
+    LC_TIME=en_US.UTF-8 \
+    LC_COLLATE=en_US.UTF-8 \
+    LC_MONETARY=en_US.UTF-8 \
+    LC_MESSAGES=en_US.UTF-8 \
+    LC_PAPER=en_US.UTF-8 \
+    LC_NAME=en_US.UTF-8 \
+    LC_ADDRESS=en_US.UTF-8 \
+    LC_TELEPHONE=en_US.UTF-8 \
+    LC_MEASUREMENT=en_US.UTF-8 \
+    LC_IDENTIFICATION=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    TZ=Asia/Hong_Kong
+
+WORKDIR /$USER_NM
+
+USER $USER_NM

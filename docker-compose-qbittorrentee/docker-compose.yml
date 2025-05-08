@@ -1,0 +1,57 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  qbittorrentee-downloads:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/qbittorrentee/downloads
+      o: bind
+  qbittorrentee-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/qbittorrentee/config
+      o: bind
+
+services:
+  qbittorrentee:
+    restart: unless-stopped
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/postgres:16.1
+    container_name: qbittorrentee
+    environment:
+      TZ: Asia/Shanghai
+      PUID: 1026
+      PGID: 100
+      WEBUIPORT: 18080
+      WEB_USER: admin
+      WEB_PASSWORD_FILE: /run/secrets/qbittorrentee_admin_password
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    volumes:
+      - qbittorrentee-downloads:/downloads
+      - qbittorrentee-config:/config
+    secrets:
+      - qbittorrentee_admin_password
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "6881:6881"
+      - "6881:6881/udp"
+      - "18080:18080"
+    networks:
+      - monet_network
+
+secrets:
+  qbittorrentee_admin_password:
+    file: /opt/docker/secrets/qbittorrentee_admin_password.txt

@@ -1,0 +1,134 @@
+name: Aggregation Docker Compose Deploy Workflow
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  BUILD_WORKSPACE_NAME: workspace
+
+jobs:
+  build:
+    name: Docker Compose Deploy Build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.0
+        with:
+          submodules: recursive
+
+      - name: Prepare Workspace
+        run: |
+          mkdir -pv ${{ env.BUILD_WORKSPACE_NAME }}/docker/secrets
+          cp -a docker-compose-* ${{ env.BUILD_WORKSPACE_NAME }}/
+
+      - name: Prepare MySQL Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/mysql/data docker/mysql/init docker/mysql/config docker/mysql/logs
+          cp docker-compose-mysql/docker-compose.yml docker/mysql/docker-compose.yml
+          cp -r docker-compose-mysql/src/config/* docker/mysql/config/
+          cp -r docker-compose-mysql/src/secrets/* docker/secrets/
+
+      - name: Prepare Redis Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/redis/data docker/redis/config docker/redis/logs
+          cp docker-compose-redis/docker-compose.yml docker/redis/docker-compose.yml
+          cp -r docker-compose-redis/src/config/* docker/redis/config/
+
+      - name: Prepare ES Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/elasticsearch/data docker/elasticsearch/plugins docker/elasticsearch/config docker/elasticsearch/logs
+          cp docker-compose-elasticsearch/docker-compose.yml docker/elasticsearch/docker-compose.yml
+          cp -r docker-compose-elasticsearch/src/7_16_3/config/* docker/elasticsearch/config/
+          cp -r docker-compose-elasticsearch/src/7_16_3/plugins/* docker/elasticsearch/plugins/
+          cp -r docker-compose-elasticsearch/src/7_16_3/secrets/* docker/secrets/
+          chmod 600 docker/secrets/elasticsearch_password.txt
+
+      - name: Prepare ZooKeeper Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/zookeeper/config docker/zookeeper/data docker/zookeeper/data-log docker/zookeeper/logs
+          cp docker-compose-zookeeper/docker-compose.yml docker/zookeeper/docker-compose.yml
+          cp -r docker-compose-zookeeper/src/config/* docker/zookeeper/config/
+
+      - name: Prepare RocketMQ Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/rocketmq/namesrv/logs docker/rocketmq/broker/store docker/rocketmq/broker/logs docker/rocketmq/broker/config/
+          cp docker-compose-rocketmq/docker-compose.yml docker/rocketmq/docker-compose.yml
+          cp -r docker-compose-rocketmq/src/4_9_7/config/* docker/rocketmq/broker/config/
+
+      - name: Prepare Prometheus Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/prometheus/data docker/prometheus/config docker/prometheus/alertmanager/data docker/prometheus/alertmanager/config
+          cp docker-compose-prometheus/docker-compose.yml docker/prometheus/docker-compose.yml
+          cp -r docker-compose-prometheus/src/alertmanager/config/* docker/prometheus/config/
+          cp -r docker-compose-prometheus/src/server/config/* docker/prometheus/alertmanager/config/
+
+      - name: Prepare Grafana Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/grafana/data docker/grafana/config
+          cp docker-compose-grafana/docker-compose.yml docker/grafana/docker-compose.yml
+          cp -r docker-compose-grafana/src/config/* docker/grafana/config/
+          cp -r docker-compose-grafana/src/secrets/* docker/secrets/
+
+      - name: Prepare SkyWalking Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/skywalking/message docker/skywalking/config docker/skywalking/logs
+          cp docker-compose-skywalking/docker-compose.yml docker/skywalking/docker-compose.yml
+          cp -r docker-compose-skywalking/src/oap/9_6_0/config/* docker/skywalking/config/
+
+      - name: Prepare Nacos Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/nacos/logs docker/nacos/config docker/nacos/scripts
+          cp docker-compose-nacos/docker-compose.yml docker/nacos/docker-compose.yml
+          cp -r docker-compose-nacos/src/config/* docker/nacos/config/
+          cp -r docker-compose-nacos/src/scripts/* docker/nacos/scripts/
+          cp -r docker-compose-nacos/src/scripts/* docker/mysql/init/
+
+      - name: Prepare Kibana Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          mkdir -pvm 777 docker/kibana/data docker/kibana/plugins docker/kibana/config
+          cp docker-compose-kibana/docker-compose.yml docker/kibana/docker-compose.yml
+          cp -r docker-compose-kibana/src/7_16_3/config/* docker/kibana/config/
+
+      - name: Prepare Docker Compose Files
+        run: |
+          cd ${{ env.BUILD_WORKSPACE_NAME }}
+          cp docker-compose-0/*.yml docker/
+          cp docker-compose-0/*.sh docker/
+          tar -zcf docker.tar.gz docker
+
+      - name: Copy File Remote
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.REMOTE_DC_HOST }}
+          username: ${{ secrets.REMOTE_DC_USER }}
+          password: ${{ secrets.REMOTE_DC_PASS }}
+          port: ${{ secrets.REMOTE_DC_PORT }}
+          strip_components: 1
+          overwrite: true
+          source: ${{ env.BUILD_WORKSPACE_NAME }}/docker.tar.gz
+          target: /opt
+
+      - name: Exec Remote
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_DC_HOST }}
+          username: ${{ secrets.REMOTE_DC_USER }}
+          password: ${{ secrets.REMOTE_DC_PASS }}
+          port: ${{ secrets.REMOTE_DC_PORT }}
+          script_stop: true
+          script: |
+            chown ${{ secrets.REMOTE_DC_USER }}:${{ secrets.REMOTE_DC_USER }} /opt/docker.tar.gz
+            tar -zxf /opt/docker.tar.gz -C /opt/
+            chown -R ${{ secrets.REMOTE_DC_USER }}:${{ secrets.REMOTE_DC_USER }} /opt/docker

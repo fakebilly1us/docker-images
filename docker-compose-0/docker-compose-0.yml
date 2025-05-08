@@ -1,0 +1,588 @@
+version: '3'
+
+networks:
+  monet_network:
+    external: true
+
+volumes:
+  mysql-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/data
+      o: bind
+  mysql-init:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/init
+      o: bind
+  mysql-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/config
+      o: bind
+  mysql-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/mysql/logs
+      o: bind
+  redis-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/data
+      o: bind
+  redis-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/config
+      o: bind
+  redis-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/redis/logs
+      o: bind
+  es-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/data
+      o: bind
+  es-plugins:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/plugins
+      o: bind
+  es-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/config
+      o: bind
+  es-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/es/logs
+      o: bind
+  zookeeper-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/config
+      o: bind
+  zookeeper-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/data
+      o: bind
+  zookeeper-data-log:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/data-log
+      o: bind
+  zookeeper-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/zookeeper/logs
+      o: bind
+  rocketmq-namesrv-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/namesrv/logs
+      o: bind
+  rocketmq-broker-store:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/broker/store
+      o: bind
+  rocketmq-broker-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/rocketmq/broker/logs
+      o: bind
+  prometheus-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/data
+      o: bind
+  prometheus-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/config
+      o: bind
+  prometheus-alertmanager-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/alertmanager/data
+      o: bind
+  prometheus-alertmanager-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/prometheus/alertmanager/config
+      o: bind
+  grafana-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/grafana/data
+      o: bind
+  grafana-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/grafana/config
+      o: bind
+  skywalking-message:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/skywalking/message
+      o: bind
+  skywalking-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/skywalking/config
+      o: bind
+  skywalking-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/skywalking/logs
+      o: bind
+  nacos-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/nacos/logs
+      o: bind
+  kibana-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/data
+      o: bind
+  kibana-plugins:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/plugins
+      o: bind
+  kibana-config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /opt/docker/kibana/config
+      o: bind
+
+secrets:
+  mysql_root_password:
+    file: /opt/docker/secrets/mysql_root_password.txt
+  elasticsearch_password:
+    file: /opt/docker/secrets/elasticsearch_password.txt
+  grafana_admin_password:
+    file: /opt/docker/secrets/grafana_admin_password.txt
+
+services:
+  mysql:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/mysql:8.0.34
+    container_name: mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-config:/etc/mysql/conf.d
+      - mysql-logs:/logs
+      - mysql-init:/docker-entrypoint-initdb.d
+    secrets:
+      - mysql_root_password
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "13306:3306"
+    networks:
+      - monet_network
+  redis:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/redis:6.2.13
+    container_name: redis
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - redis-data:/opt/data
+      - redis-config:/opt/config
+      - redis-logs:/opt/logs
+    command: redis-server /opt/config/redis.conf
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "16379:6379"
+    networks:
+      - monet_network
+  elasticsearch:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/elasticsearch:7.16.3
+    container_name: elasticsearch
+    environment:
+      TZ: Asia/Shanghai
+      ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+      ELASTIC_PASSWORD_FILE: /run/secrets/elasticsearch_password
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+      - es-plugins:/usr/share/elasticsearch/plugins
+      - es-config:/usr/share/elasticsearch/config
+      - es-logs:/usr/share/elasticsearch/logs
+    secrets:
+      - elasticsearch_password
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19200:9200"
+      - "19300:9300"
+    networks:
+      - monet_network
+  zookeeper:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/zookeeper:3.8.2
+    container_name: zookeeper
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - zookeeper-config:/conf
+      - zookeeper-data:/data
+      - zookeeper-data-log:/datalog
+      - zookeeper-logs:/logs
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "12181:2181"
+      - "12888:2888"
+      - "13888:3888"
+    networks:
+      - monet_network
+  rocketmq-nameserver:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq:4.9.7
+    container_name: rocketmq-nameserver
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPT_EXT: '-server -Xms512m -Xmx512m'
+    volumes:
+      - rocketmq-namesrv-logs:/home/rocketmq/logs
+    command: sh mqnamesrv
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19876:9876"
+    networks:
+      - monet_network
+  rocketmq-broker:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq:4.9.7
+    container_name: rocketmq-broker
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPT_EXT: '-server -Xms512M -Xmx512M -Xmn256m'
+      NAMESRV_ADDR: rocketmq-nameserver:9876
+    volumes:
+      - rocketmq-broker-store:/home/rocketmq/store
+      - /opt/docker/rocketmq/broker/config/broker.conf:/home/rocketmq/rocketmq-4.9.7/conf/broker.conf
+      - rocketmq-broker-logs:/home/rocketmq/logs/rocketmqlogs
+    command: sh mqbroker -c /home/rocketmq/rocketmq-4.9.7/conf/broker.conf
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "10911:10911"
+      - "10909:10909"
+      - "10912:10912"
+    networks:
+      - monet_network
+    depends_on:
+      - rocketmq-nameserver
+  rocketmq-dashboard:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/rocketmq-dashboard:1.0.0
+    container_name: rocketmq-dashboard
+    environment:
+      TZ: Asia/Shanghai
+      JAVA_OPTS: '-Xms512M -Xmx512M -Xmn256m -Drocketmq.namesrv.addr=rocketmq-nameserver:9876'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "10880:8080"
+    networks:
+      - monet_network
+    depends_on:
+      - rocketmq-nameserver
+      - rocketmq-broker
+  dubbo-admin:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/dubbo-admin:0.6.0
+    container_name: dubbo-admin
+    environment:
+      TZ: Asia/Shanghai
+      admin.registry.address: zookeeper://zookeeper:2181
+      admin.config-center: zookeeper://zookeeper:2181
+      admin.metadata-report.address: zookeeper://zookeeper:2181
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "13080:38080"
+    networks:
+      - monet_network
+    depends_on:
+      - zookeeper
+  prometheus:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prometheus:v2.47.0
+    container_name: prometheus
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - prometheus-config:/etc/config
+      - prometheus-data:/data
+    command:
+      - '--config.file=/etc/config/prometheus.yml'
+      - '--storage.tsdb.path=/data'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19090:9090"
+    networks:
+      - monet_network
+    depends_on:
+      - prometheus-alertmanager
+  prometheus-alertmanager:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prom-alertmanager:v0.26.0
+    container_name: prometheus-alertmanager
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - prometheus-alertmanager-config:/etc/config
+      - prometheus-alertmanager-data:/data
+    command:
+      - '--config.file=/etc/config/alertmanager.yml'
+      - '--storage.path=/data'
+      - '--cluster.listen-address='
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19093:9093"
+    networks:
+      - monet_network
+  prometheus-pushgateway:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/prom-pushgateway:v1.7.0
+    container_name: prometheus-pshgateway
+    environment:
+      TZ: Asia/Shanghai
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "19091:9091"
+    networks:
+      - monet_network
+  grafana:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/grafana:10.1.2
+    container_name: grafana
+    environment:
+      TZ: Asia/Shanghai
+      GF_AUTH_LDAP_ALLOW_SIGN_UP: 'false'
+      GF_AUTH_LDAP_ENABLED: 'false'
+      GF_AUTH_LDAP_CONFIG_FILE: /opt/grafana/conf/ldap.toml
+      GF_PATHS_CONFIG: /opt/grafana/conf/grafana.ini
+      GF_PATHS_DATA: /opt/grafana/data
+      GF_PATHS_LOGS: /opt/grafana/data/logs
+      GF_PATHS_PLUGINS: /opt/grafana/data/plugins
+      GF_PATHS_PROVISIONING: /opt/grafana/conf/provisioning
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+    volumes:
+      - grafana-config:/opt/grafana/conf
+      - grafana-data:/opt/grafana/data
+    secrets:
+      - grafana_admin_password
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "13000:3000"
+    networks:
+      - monet_network
+  skywalking-oap:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/skywalking-oap-server:9.6.0
+    container_name: skywalking-oap-server
+    environment:
+      TZ: Asia/Shanghai
+      SW_NAMESPACE: skywalking
+      SW_STORAGE: elasticsearch
+      SW_ES_USER: elastic
+      SW_ES_PASSWORD: 'LZ4N4jUFbg5C'
+      SW_STORAGE_ES_CLUSTER_NODES: 'elasticsearch:9200'
+      JAVA_OPTS: '-Xms512m -Xmx512m'
+    volumes:
+      - skywalking-config:/usr/share/logstash/config
+      - skywalking-logs:/usr/share/logstash/logs
+      - skywalking-message:/var/log/message
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "11800:11800"
+      - "12800:12800"
+    networks:
+      monet_network:
+  skywalking-ui:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/skywalking-ui:9.6.0
+    container_name: skywalking-ui
+    environment:
+      TZ: Asia/Shanghai
+      SW_OAP_ADDRESS: http://skywalking-oap:12800
+      JAVA_OPTS: '-Xms256m -Xmx256m'
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "10808:8080"
+    networks:
+      monet_network:
+    depends_on:
+      - skywalking-oap
+  kibana:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/kibana:7.16.3
+    container_name: kibana
+    environment:
+      TZ: Asia/Shanghai
+      NODE_OPTIONS: '--max-old-space-size=1800'
+      SERVER_HOST: 0.0.0.0
+      ELASTICSEARCH_HOSTS: http://es:9200
+    volumes:
+      - kibana-data:/usr/share/kibana/data
+      - kibana-plugins:/usr/share/kibana/plugins
+      - kibana-config:/usr/share/kibana/config
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "15601:5601"
+    networks:
+      - monet_network
+  nacos:
+    restart: always
+    privileged: true
+    image: registry.cn-beijing.aliyuncs.com/monet/nacos-server:v2.2.3
+    container_name: nacos
+    environment:
+      TZ: Asia/Shanghai
+      MODE: standalone
+      NACOS_AUTH_ENABLE: true
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_PORT: 3306
+      MYSQL_SERVICE_USER: nacos
+      MYSQL_SERVICE_PASSWORD: LZ4N4jUFbg5C
+      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      JVM_XMS: 512m
+      JVM_MMX: 512m
+      JVM_XMN: 256m
+      NACOS_AUTH_TOKEN: MmE4MGI5NmQ3Yzc5Yjg5Y2YzM2Y0ODU1M2FiYmEzYzQ=
+      NACOS_AUTH_IDENTITY_KEY: nacos
+      NACOS_AUTH_IDENTITY_VALUE: LZ4N4jUFbg5C
+    volumes:
+      - nacos-logs:/home/nacos/logs
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '500m'
+        max-file: "10"
+    ports:
+      - "18848:8848"
+      - "17848:7848"
+      - "19848:9848"
+    networks:
+      - monet_network

@@ -22,7 +22,7 @@ env:
 jobs:
   build:
     name: Kibana 8_11_3 Image Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code

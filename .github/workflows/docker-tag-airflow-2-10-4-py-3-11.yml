@@ -27,7 +27,7 @@ env:
 jobs:
   build:
     name: Airflow 2.10.4 Python 3.11 Tag Image Build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code

@@ -1,4 +1,4 @@
-name: Kafka UI Beta Docker Workflow
+name: Kafka UI Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/provectuslabs-kafka-ui:latest-beta
-  GCHR_DOCKERHUB_IMAGE: provectuslabs-kafka-ui:latest-beta
-  ALI_DOCKERHUB_IMAGE: monet/provectuslabs-kafka-ui:latest-beta
+  DOCKERHUB_IMAGE: fakebilly/provectuslabs-kafka-ui:latest
+  GCHR_DOCKERHUB_IMAGE: provectuslabs-kafka-ui:latest
+  ALI_DOCKERHUB_IMAGE: monet/provectuslabs-kafka-ui:latest
 
 jobs:
   build:
-    name: Kafka UI Beta Image Build
+    name: Kafka UI Image Build
     runs-on: ubuntu-20.04
 
     steps:

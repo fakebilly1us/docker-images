@@ -1,4 +1,4 @@
-name: Doris BE Beta Docker Workflow
+name: Doris BE Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/doris-be:1.2.7.1-beta
-  GCHR_DOCKERHUB_IMAGE: doris-be:1.2.7.1-beta
-  ALI_DOCKERHUB_IMAGE: monet/doris-be:1.2.7.1-beta
+  DOCKERHUB_IMAGE: fakebilly/doris-be:1.2.7.1
+  GCHR_DOCKERHUB_IMAGE: doris-be:1.2.7.1
+  ALI_DOCKERHUB_IMAGE: monet/doris-be:1.2.7.1
 
 jobs:
   build:
-    name: Doris BE Beta Image Build
+    name: Doris BE Image Build
     runs-on: ubuntu-20.04
 
     steps:
@@ -59,7 +59,7 @@ jobs:
             linux/amd64
           build-args:
           context: docker-image-doris
-          file: docker-image-doris/Dockerfile-doris-be-beta
+          file: docker-image-doris/Dockerfile-doris-be
           no-cache: true
           push: true
           tags: ${{ env.DOCKERHUB_IMAGE }}

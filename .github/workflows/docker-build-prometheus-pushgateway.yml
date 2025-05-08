@@ -1,4 +1,4 @@
-name: Prometheus Pushgateway Beta Docker Workflow
+name: Prometheus Pushgateway Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/prom-pushgateway:v1.7.0-beta
-  GCHR_DOCKERHUB_IMAGE: prom-pushgateway:v1.7.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/prom-pushgateway:v1.7.0-beta
+  DOCKERHUB_IMAGE: fakebilly/prom-pushgateway:v1.7.0
+  GCHR_DOCKERHUB_IMAGE: prom-pushgateway:v1.7.0
+  ALI_DOCKERHUB_IMAGE: monet/prom-pushgateway:v1.7.0
 
 jobs:
   build:
-    name: Prometheus Pushgateway Beta Image Build
+    name: Prometheus Pushgateway Image Build
     runs-on: ubuntu-20.04
 
     steps:

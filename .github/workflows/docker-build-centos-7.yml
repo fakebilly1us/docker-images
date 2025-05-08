@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/centos:7-beta
-  GCHR_DOCKERHUB_IMAGE: centos:7-beta
-  ALI_DOCKERHUB_IMAGE: monet/centos:7-beta
+  DOCKERHUB_IMAGE: fakebilly/centos:7
+  GCHR_DOCKERHUB_IMAGE: centos:7
+  ALI_DOCKERHUB_IMAGE: monet/centos:7
 
 jobs:
   build:

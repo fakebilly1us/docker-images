@@ -1,4 +1,4 @@
-name: Prometheus Promlens Beta Docker Workflow
+name: Prometheus Promlens Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/prom-promlens:v0.3.0-beta
-  GCHR_DOCKERHUB_IMAGE: prom-promlens:v0.3.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/prom-promlens:v0.3.0-beta
+  DOCKERHUB_IMAGE: fakebilly/prom-promlens:v0.3.0
+  GCHR_DOCKERHUB_IMAGE: prom-promlens:v0.3.0
+  ALI_DOCKERHUB_IMAGE: monet/prom-promlens:v0.3.0
 
 jobs:
   build:
-    name: Prometheus Promlens Beta Image Build
+    name: Prometheus Promlens Image Build
     runs-on: ubuntu-20.04
 
     steps:

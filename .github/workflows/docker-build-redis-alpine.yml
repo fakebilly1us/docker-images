@@ -1,4 +1,4 @@
-name: Redis Alpine Beta Docker Workflow
+name: Redis Alpine Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13-alpine-beta
-  GCHR_DOCKERHUB_IMAGE: redis:6.2.13-alpine-beta
-  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13-alpine-beta
+  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13-alpine
+  GCHR_DOCKERHUB_IMAGE: redis:6.2.13-alpine
+  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13-alpine
 
 jobs:
   build:
-    name: Redis Alpine Beta Image Build
+    name: Redis Alpine Image Build
     runs-on: ubuntu-20.04
 
     steps:

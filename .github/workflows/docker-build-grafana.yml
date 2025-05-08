@@ -1,4 +1,4 @@
-name: Grafana Beta Docker Workflow
+name: Grafana Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/grafana:10.1.2-beta
-  GCHR_DOCKERHUB_IMAGE: grafana:10.1.2-beta
-  ALI_DOCKERHUB_IMAGE: monet/grafana:10.1.2-beta
+  DOCKERHUB_IMAGE: fakebilly/grafana:10.1.2
+  GCHR_DOCKERHUB_IMAGE: grafana:10.1.2
+  ALI_DOCKERHUB_IMAGE: monet/grafana:10.1.2
 
 jobs:
   build:
-    name: Grafana Beta Image Build
+    name: Grafana Image Build
     runs-on: ubuntu-20.04
 
     steps:

@@ -1,4 +1,4 @@
-name: PostgreSQL Beta Docker Workflow
+name: PostgreSQL Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/postgres:16.1-beta
-  GCHR_DOCKERHUB_IMAGE: postgres:16.1-beta
-  ALI_DOCKERHUB_IMAGE: monet/postgres:16.1-beta
+  DOCKERHUB_IMAGE: fakebilly/postgres:16.1
+  GCHR_DOCKERHUB_IMAGE: postgres:16.1
+  ALI_DOCKERHUB_IMAGE: monet/postgres:16.1
 
 jobs:
   build:
-    name: PostgreSQL Beta Image Build
+    name: PostgreSQL Image Build
     runs-on: ubuntu-20.04
 
     steps:

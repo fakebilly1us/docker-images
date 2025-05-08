@@ -1,4 +1,4 @@
-name: Prometheus Beta Docker Workflow
+name: Prometheus Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/prometheus:v2.47.0-beta
-  GCHR_DOCKERHUB_IMAGE: prometheus:v2.47.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/prometheus:v2.47.0-beta
+  DOCKERHUB_IMAGE: fakebilly/prometheus:v2.47.0
+  GCHR_DOCKERHUB_IMAGE: prometheus:v2.47.0
+  ALI_DOCKERHUB_IMAGE: monet/prometheus:v2.47.0
 
 jobs:
   build:
-    name: Prometheus Beta Image Build
+    name: Prometheus Image Build
     runs-on: ubuntu-20.04
 
     steps:

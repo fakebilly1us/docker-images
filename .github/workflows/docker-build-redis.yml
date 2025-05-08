@@ -1,4 +1,4 @@
-name: Redis Beta Docker Workflow
+name: Redis Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13-beta
-  GCHR_DOCKERHUB_IMAGE: redis:6.2.13-beta
-  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13-beta
+  DOCKERHUB_IMAGE: fakebilly/redis:6.2.13
+  GCHR_DOCKERHUB_IMAGE: redis:6.2.13
+  ALI_DOCKERHUB_IMAGE: monet/redis:6.2.13
 
 jobs:
   build:
-    name: Redis Beta Image Build
+    name: Redis Image Build
     runs-on: ubuntu-20.04
 
     steps:

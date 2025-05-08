@@ -1,4 +1,4 @@
-name: Rocketmq Dashboard Beta Docker Workflow
+name: Rocketmq Dashboard Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/rocketmq-dashboard:1.0.0-beta
-  GCHR_DOCKERHUB_IMAGE: rocketmq-dashboard:1.0.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/rocketmq-dashboard:1.0.0-beta
+  DOCKERHUB_IMAGE: fakebilly/rocketmq-dashboard:1.0.0
+  GCHR_DOCKERHUB_IMAGE: rocketmq-dashboard:1.0.0
+  ALI_DOCKERHUB_IMAGE: monet/rocketmq-dashboard:1.0.0
 
 jobs:
   build:
-    name: Rocketmq Dashboard Beta Image Build
+    name: Rocketmq Dashboard Image Build
     runs-on: ubuntu-20.04
 
     steps:

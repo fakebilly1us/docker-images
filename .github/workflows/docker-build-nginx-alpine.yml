@@ -1,4 +1,4 @@
-name: Nginx Alpine Beta Docker Workflow
+name: Nginx Alpine Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0-alpine-beta
-  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0-alpine-beta
-  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0-alpine-beta
+  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0-alpine
+  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0-alpine
+  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0-alpine
 
 jobs:
   build:
-    name: Nginx Alpine Beta Image Build
+    name: Nginx Alpine Image Build
     runs-on: ubuntu-20.04
 
     steps:

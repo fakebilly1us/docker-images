@@ -1,4 +1,4 @@
-name: Alpine Beta Docker Workflow
+name: Alpine Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/alpine:3.19-beta
-  GCHR_DOCKERHUB_IMAGE: alpine:3.19-beta
-  ALI_DOCKERHUB_IMAGE: monet/alpine:3.19-beta
+  DOCKERHUB_IMAGE: fakebilly/alpine:3.19
+  GCHR_DOCKERHUB_IMAGE: alpine:3.19
+  ALI_DOCKERHUB_IMAGE: monet/alpine:3.19
 
 jobs:
   build:
-    name: Alpine Beta Image Build
+    name: Alpine Image Build
     runs-on: ubuntu-20.04
 
     steps:

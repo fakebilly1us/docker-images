@@ -1,4 +1,4 @@
-name: MinIO Beta Docker Workflow
+name: MinIO Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/minio:RELEASE.2024-01-18T22-51-28Z-beta
-  GCHR_DOCKERHUB_IMAGE: minio:RELEASE.2024-01-18T22-51-28Z-beta
-  ALI_DOCKERHUB_IMAGE: monet/minio:RELEASE.2024-01-18T22-51-28Z-beta
+  DOCKERHUB_IMAGE: fakebilly/minio:RELEASE.2024-01-18T22-51-28Z
+  GCHR_DOCKERHUB_IMAGE: minio:RELEASE.2024-01-18T22-51-28Z
+  ALI_DOCKERHUB_IMAGE: monet/minio:RELEASE.2024-01-18T22-51-28Z
 
 jobs:
   build:
-    name: MinIO Beta Image Build
+    name: MinIO Image Build
     runs-on: ubuntu-20.04
 
     steps:

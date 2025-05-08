@@ -1,4 +1,4 @@
-name: Kafka Beta Docker Workflow
+name: Kafka Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/kafka:3.6.1-beta
-  GCHR_DOCKERHUB_IMAGE: kafka:3.6.1-beta
-  ALI_DOCKERHUB_IMAGE: monet/kafka:3.6.1-beta
+  DOCKERHUB_IMAGE: fakebilly/kafka:3.6.1
+  GCHR_DOCKERHUB_IMAGE: kafka:3.6.1
+  ALI_DOCKERHUB_IMAGE: monet/kafka:3.6.1
 
 jobs:
   build:
-    name: Kafka Beta Image Build
+    name: Kafka Image Build
     runs-on: ubuntu-20.04
 
     steps:

@@ -1,4 +1,4 @@
-name: Mongo Express Beta Docker Workflow
+name: Mongo Express Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/mongo-express:1.0.2-20-beta
-  GCHR_DOCKERHUB_IMAGE: mongo-express:1.0.2-20-beta
-  ALI_DOCKERHUB_IMAGE: monet/mongo-express:1.0.2-20-beta
+  DOCKERHUB_IMAGE: fakebilly/mongo-express:1.0.2-20
+  GCHR_DOCKERHUB_IMAGE: mongo-express:1.0.2-20
+  ALI_DOCKERHUB_IMAGE: monet/mongo-express:1.0.2-20
 
 jobs:
   build:
-    name: Mongo Express Beta Image Build
+    name: Mongo Express Image Build
     runs-on: ubuntu-20.04
 
     steps:

@@ -1,4 +1,4 @@
-name: Prometheus Alertmanager Beta Docker Workflow
+name: Prometheus Alertmanager Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/prom-alertmanager:v0.26.0-beta
-  GCHR_DOCKERHUB_IMAGE: prom-alertmanager:v0.26.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/prom-alertmanager:v0.26.0-beta
+  DOCKERHUB_IMAGE: fakebilly/prom-alertmanager:v0.26.0
+  GCHR_DOCKERHUB_IMAGE: prom-alertmanager:v0.26.0
+  ALI_DOCKERHUB_IMAGE: monet/prom-alertmanager:v0.26.0
 
 jobs:
   build:
-    name: Prometheus Alertmanager Beta Image Build
+    name: Prometheus Alertmanager Image Build
     runs-on: ubuntu-20.04
 
     steps:

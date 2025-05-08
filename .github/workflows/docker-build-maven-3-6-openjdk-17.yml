@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/maven:3.6-openjdk-17-beta
-  GCHR_DOCKERHUB_IMAGE: maven:3.6-openjdk-17-beta
-  ALI_DOCKERHUB_IMAGE: monet/maven:3.6-openjdk-17-beta
+  DOCKERHUB_IMAGE: fakebilly/maven:3.6-openjdk-17
+  GCHR_DOCKERHUB_IMAGE: maven:3.6-openjdk-17
+  ALI_DOCKERHUB_IMAGE: monet/maven:3.6-openjdk-17
 
 jobs:
   build:

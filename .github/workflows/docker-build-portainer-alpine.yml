@@ -1,4 +1,4 @@
-name: Portainer Alpine Beta Docker Workflow
+name: Portainer Alpine Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/portainer-ce:2.19.4-alpine-beta
-  GCHR_DOCKERHUB_IMAGE: portainer-ce:2.19.4-alpine-beta
-  ALI_DOCKERHUB_IMAGE: monet/portainer-ce:2.19.4-alpine-beta
+  DOCKERHUB_IMAGE: fakebilly/portainer-ce:2.19.4-alpine
+  GCHR_DOCKERHUB_IMAGE: portainer-ce:2.19.4-alpine
+  ALI_DOCKERHUB_IMAGE: monet/portainer-ce:2.19.4-alpine
 
 jobs:
   build:
-    name: Portainer Alpine Beta Image Build
+    name: Portainer Alpine Image Build
     runs-on: ubuntu-20.04
 
     steps:

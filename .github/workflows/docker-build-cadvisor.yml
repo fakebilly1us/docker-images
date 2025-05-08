@@ -1,4 +1,4 @@
-name: cAdvisor Beta Docker Workflow
+name: cAdvisor Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/cadvisor:v0.47.2-beta
-  GCHR_DOCKERHUB_IMAGE: cadvisor:v0.47.2-beta
-  ALI_DOCKERHUB_IMAGE: monet/cadvisor:v0.47.2-beta
+  DOCKERHUB_IMAGE: fakebilly/cadvisor:v0.47.2
+  GCHR_DOCKERHUB_IMAGE: cadvisor:v0.47.2
+  ALI_DOCKERHUB_IMAGE: monet/cadvisor:v0.47.2
 
 jobs:
   build:
-    name: cAdvisor Beta Image Build
+    name: cAdvisor Image Build
     runs-on: ubuntu-20.04
 
     steps:

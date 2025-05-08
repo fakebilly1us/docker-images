@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/openjdk:8u342-oracle-beta
-  GCHR_DOCKERHUB_IMAGE: openjdk:8u342-oracle-beta
-  ALI_DOCKERHUB_IMAGE: monet/openjdk:8u342-oracle-beta
+  DOCKERHUB_IMAGE: fakebilly/openjdk:8u342-oracle
+  GCHR_DOCKERHUB_IMAGE: openjdk:8u342-oracle
+  ALI_DOCKERHUB_IMAGE: monet/openjdk:8u342-oracle
 
 jobs:
   build:

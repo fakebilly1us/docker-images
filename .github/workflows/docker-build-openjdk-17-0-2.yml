@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/openjdk:17.0.2-beta
-  GCHR_DOCKERHUB_IMAGE: openjdk:17.0.2-beta
-  ALI_DOCKERHUB_IMAGE: monet/openjdk:17.0.2-beta
+  DOCKERHUB_IMAGE: fakebilly/openjdk:17.0.2
+  GCHR_DOCKERHUB_IMAGE: openjdk:17.0.2
+  ALI_DOCKERHUB_IMAGE: monet/openjdk:17.0.2
 
 jobs:
   build:

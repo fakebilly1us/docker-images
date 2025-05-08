@@ -1,4 +1,4 @@
-name: Nginx Beta Docker Workflow
+name: Nginx Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0-beta
-  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0-beta
-  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0-beta
+  DOCKERHUB_IMAGE: fakebilly/nginx:1.24.0
+  GCHR_DOCKERHUB_IMAGE: nginx:1.24.0
+  ALI_DOCKERHUB_IMAGE: monet/nginx:1.24.0
 
 jobs:
   build:
-    name: Nginx Beta Image Build
+    name: Nginx Image Build
     runs-on: ubuntu-20.04
 
     steps:

@@ -1,4 +1,4 @@
-name: Elasticsearch 8_11_3 Beta Docker Workflow
+name: Elasticsearch 8_11_3 Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/elasticsearch:8.11.3-beta
-  GCHR_DOCKERHUB_IMAGE: elasticsearch:8.11.3-beta
-  ALI_DOCKERHUB_IMAGE: monet/elasticsearch:8.11.3-beta
+  DOCKERHUB_IMAGE: fakebilly/elasticsearch:8.11.3
+  GCHR_DOCKERHUB_IMAGE: elasticsearch:8.11.3
+  ALI_DOCKERHUB_IMAGE: monet/elasticsearch:8.11.3
 
 jobs:
   build:
-    name: Elasticsearch 8_11_3 Beta Image Build
+    name: Elasticsearch 8_11_3 Image Build
     runs-on: ubuntu-20.04
 
     steps:

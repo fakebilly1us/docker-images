@@ -1,4 +1,4 @@
-name: Rocketmq Beta Docker Workflow
+name: Rocketmq Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/rocketmq:4.9.7-beta
-  GCHR_DOCKERHUB_IMAGE: rocketmq:4.9.7-beta
-  ALI_DOCKERHUB_IMAGE: monet/rocketmq:4.9.7-beta
+  DOCKERHUB_IMAGE: fakebilly/rocketmq:4.9.7
+  GCHR_DOCKERHUB_IMAGE: rocketmq:4.9.7
+  ALI_DOCKERHUB_IMAGE: monet/rocketmq:4.9.7
 
 jobs:
   build:
-    name: Rocketmq Beta Image Build
+    name: Rocketmq Image Build
     runs-on: ubuntu-20.04
 
     steps:

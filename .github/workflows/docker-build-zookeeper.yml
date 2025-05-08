@@ -1,4 +1,4 @@
-name: Zookeeper Beta Docker Workflow
+name: Zookeeper Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/zookeeper:3.8.2-beta
-  GCHR_DOCKERHUB_IMAGE: zookeeper:3.8.2-beta
-  ALI_DOCKERHUB_IMAGE: monet/zookeeper:3.8.2-beta
+  DOCKERHUB_IMAGE: fakebilly/zookeeper:3.8.2
+  GCHR_DOCKERHUB_IMAGE: zookeeper:3.8.2
+  ALI_DOCKERHUB_IMAGE: monet/zookeeper:3.8.2
 
 jobs:
   build:
-    name: Zookeeper Beta Image Build
+    name: Zookeeper Image Build
     runs-on: ubuntu-20.04
 
     steps:

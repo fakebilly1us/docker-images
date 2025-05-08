@@ -1,4 +1,4 @@
-name: Consul Beta Docker Workflow
+name: Consul Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/consul:1.16.4-beta
-  GCHR_DOCKERHUB_IMAGE: consul:1.16.4-beta
-  ALI_DOCKERHUB_IMAGE: monet/consul:1.16.4-beta
+  DOCKERHUB_IMAGE: fakebilly/consul:1.16.4
+  GCHR_DOCKERHUB_IMAGE: consul:1.16.4
+  ALI_DOCKERHUB_IMAGE: monet/consul:1.16.4
 
 jobs:
   build:
-    name: Consul Beta Image Build
+    name: Consul Image Build
     runs-on: ubuntu-20.04
 
     steps:

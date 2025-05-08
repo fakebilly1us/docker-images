@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/ubuntu:22.04-beta
-  GCHR_DOCKERHUB_IMAGE: ubuntu:22.04-beta
-  ALI_DOCKERHUB_IMAGE: monet/ubuntu:22.04-beta
+  DOCKERHUB_IMAGE: fakebilly/ubuntu:22.04
+  GCHR_DOCKERHUB_IMAGE: ubuntu:22.04
+  ALI_DOCKERHUB_IMAGE: monet/ubuntu:22.04
 
 jobs:
   build:

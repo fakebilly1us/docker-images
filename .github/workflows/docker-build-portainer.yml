@@ -1,4 +1,4 @@
-name: Portainer Beta Docker Workflow
+name: Portainer Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/portainer-ce:2.19.4-beta
-  GCHR_DOCKERHUB_IMAGE: portainer-ce:2.19.4-beta
-  ALI_DOCKERHUB_IMAGE: monet/portainer-ce:2.19.4-beta
+  DOCKERHUB_IMAGE: fakebilly/portainer-ce:2.19.4
+  GCHR_DOCKERHUB_IMAGE: portainer-ce:2.19.4
+  ALI_DOCKERHUB_IMAGE: monet/portainer-ce:2.19.4
 
 jobs:
   build:
-    name: Portainer Beta Image Build
+    name: Portainer Image Build
     runs-on: ubuntu-20.04
 
     steps:

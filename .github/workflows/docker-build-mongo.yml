@@ -1,4 +1,4 @@
-name: Mongo Beta Docker Workflow
+name: Mongo Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/mongo:6.0.13-beta
-  GCHR_DOCKERHUB_IMAGE: mongo:6.0.13-beta
-  ALI_DOCKERHUB_IMAGE: monet/mongo:6.0.13-beta
+  DOCKERHUB_IMAGE: fakebilly/mongo:6.0.13
+  GCHR_DOCKERHUB_IMAGE: mongo:6.0.13
+  ALI_DOCKERHUB_IMAGE: monet/mongo:6.0.13
 
 jobs:
   build:
-    name: Mongo Beta Image Build
+    name: Mongo Image Build
     runs-on: ubuntu-20.04
 
     steps:

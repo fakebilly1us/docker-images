@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/doris-fe:1.2.7.1-beta
-  GCHR_DOCKERHUB_IMAGE: doris-fe:1.2.7.1-beta
-  ALI_DOCKERHUB_IMAGE: monet/doris-fe:1.2.7.1-beta
+  DOCKERHUB_IMAGE: fakebilly/doris-fe:1.2.7.1
+  GCHR_DOCKERHUB_IMAGE: doris-fe:1.2.7.1
+  ALI_DOCKERHUB_IMAGE: monet/doris-fe:1.2.7.1
 
 jobs:
   build:
@@ -59,7 +59,7 @@ jobs:
             linux/amd64
           build-args:
           context: docker-image-doris
-          file: docker-image-doris/Dockerfile-doris-fe-beta
+          file: docker-image-doris/Dockerfile-doris-fe
           no-cache: true
           push: true
           tags: ${{ env.DOCKERHUB_IMAGE }}

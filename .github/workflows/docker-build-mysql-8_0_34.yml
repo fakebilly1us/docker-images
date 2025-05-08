@@ -1,4 +1,4 @@
-name: Mysql 8_0_34 Beta Docker Workflow
+name: Mysql 8_0_34 Docker Workflow
 
 on:
   workflow_dispatch:
@@ -15,13 +15,13 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/mysql:8.0.34-beta
-  GCHR_DOCKERHUB_IMAGE: mysql:8.0.34-beta
-  ALI_DOCKERHUB_IMAGE: monet/mysql:8.0.34-beta
+  DOCKERHUB_IMAGE: fakebilly/mysql:8.0.34
+  GCHR_DOCKERHUB_IMAGE: mysql:8.0.34
+  ALI_DOCKERHUB_IMAGE: monet/mysql:8.0.34
 
 jobs:
   build:
-    name: Mysql 8_0_34 Beta Image Build
+    name: Mysql 8_0_34 Image Build
     runs-on: ubuntu-20.04
 
     steps:

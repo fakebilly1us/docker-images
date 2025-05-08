@@ -15,9 +15,9 @@ on:
   workflow_call:
 
 env:
-  DOCKERHUB_IMAGE: fakebilly/debian:12-beta
-  GCHR_DOCKERHUB_IMAGE: debian:12-beta
-  ALI_DOCKERHUB_IMAGE: monet/debian:12-beta
+  DOCKERHUB_IMAGE: fakebilly/debian:12
+  GCHR_DOCKERHUB_IMAGE: debian:12
+  ALI_DOCKERHUB_IMAGE: monet/debian:12
 
 jobs:
   build:
